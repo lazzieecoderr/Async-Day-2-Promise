@@ -1,0 +1,174 @@
+Contents:
+Promise
+ - What is a promise?
+ - Promise States
+ - Promise chain
+ - promise.all()
+ - Use of fetch() & then()
+
+Task :-
+https://docs.google.com/document/d/1s5jhTeSD2ff2rHKbC5VQjao4Jbu257dxubwEKusoA9A/edit
+
+ Callbackhell:- 
+   function a1(){
+    function a2(){
+        function a3(){
+            console.log("Hi hello")
+        }
+    }
+   }
+
+   Promise:- 
+   => It holds the result of async operation.
+   => To overcome the problem of Callbackhell scenario promise is used.
+   => It is an object, which holds the result of async operation.
+   Syntax:- let/const variablename = new Promise((resolve,reject)=>{})
+   Promise States:- 
+   for every promise objects we have 3 states,
+   1.pending
+   2.Fullfilled / resolved
+   3.rejected
+
+   .then and catch
+   => To handle the promise object we are going to use then and catch
+
+   //promise chain
+   => chaining of promise
+   => Dependent operation
+   => first promise output will be the input of second promise.
+
+   //promise.all()
+   => It is used when we have multiple promises
+   => It will wait for all the promises to get resolved.
+   => It returns an array of values.
+   //Drawbacks
+   => if one promise gets rejected it wont go for other.
+   => it will display the information of the rejected promise.
+   
+   //promise.allsettled
+   => when you want know the state of each promise.
+   => output will be a promise object.
+   => It will be more usefull when you dont have dependent operation.
+  
+//! let / const variablename = new Promise((resolve,reject)=>{})
+/*const num = parseInt(prompt("Enter the number"));
+const p = new Promise((resolve, reject) => {
+  if (num % 2 === 0) {
+    resolve("Even number");
+  } else {
+    reject("Odd number");
+  }
+});
+console.log(p);
+p.then((data) => console.log(data)).catch((error) => console.log(error));
+*/
+
+//18 > vote eligible 18 < not eligible
+
+//!promise in functions
+// it will return the promise
+//.then and .catch
+/*function foo(num) {
+  return new Promise((resolve, reject) => {
+    if (num >= 18) {
+      resolve("Eligible to vote");
+    } else {
+      reject("Not eligible to vote");
+    }
+  });
+}
+foo(15)
+  .then((ele) => console.log(ele))
+  .catch((error) => console.log(error));
+*/
+/*
+function add(num){
+    return new Promise((resolve,reject)=>{
+        setTimeout(()=>resolve(num+2),2000)
+    })
+}
+add(2)
+.then((data)=>{
+    console.log(data); //4
+    return add(data); //add(4)
+})
+.then((ele)=>{
+    console.log(ele); //6
+    return add(ele)
+})
+.catch((error)=>console.log(error))
+*/
+//4 8 16 32
+
+//! promise.all
+/*const promise1 = new Promise((resolve, reject) => {
+  if (false) {
+    setTimeout(() => resolve("Promise 1 is resolved"), 3000);
+  } else {
+    setTimeout(() => reject("Promise 1 is rejected"), 3000);
+  }
+});
+
+const promise2 = new Promise((resolve, reject) => {
+  if (true) {
+    setTimeout(() => resolve("Promise 2 is resolved"), 3000);
+  } else {
+    setTimeout(() => reject("Promise 2 is rejected"), 3000);
+  }
+});
+
+const promise3 = new Promise((resolve, reject) => {
+  if (true) {
+    setTimeout(() => resolve("Promise 3 is resolved"), 3000);
+  } else {
+    setTimeout(() => reject("Promise 3 is rejected"), 3000);
+  }
+});
+
+Promise.all([promise1, promise2, promise3])
+  .then((data) => console.log(data))
+  .catch((error) => console.log(error));
+ 
+ const result = Promise.allSettled([promise1,promise2,promise3]).then((data)=>{
+    data.forEach((result)=>console.log(result))
+ })
+*/
+
+--------------------------------------------------------------------------------------------------
+fetch :-
+
+==> before fetch we have used the xmlhttprequest to get the data from the server.
+
+var request = new XMLHttpRequest();
+request.open("GET","https://restcountries.com/v3.1/all",true)
+request.send();
+request.onload = function(){
+    var data = request.response;
+   var result = JSON.parse(data);
+    console.log(result);
+    for(var i=0;i<result.length;i++){
+        console.log(result[i].area);
+    }
+}
+
+//=========>after fetch
+=> It is an alternative for xmlhttprequest
+=> fetch takes the API as a parameter
+syntax:- 
+fetch("url")
+=> fetch returns a promise
+=> the body section of the fetch is a readble stream.
+=> to convert the readable stream to objectjson we need to use .json() method
+=> .json() :- it is a method used to convert body data into a k:v structure
+***Important :- use .then and .catch to handle promise.
+
+//! fetch("url") .json() => k:v
+const result = fetch("https://restcountries.com/v3.1/all");
+result
+  .then((data) => data.json())
+  .then((ele) => {
+    for(let i =0;i<ele.length;i++){
+        console.log(ele[i].name.common);
+    }
+  })
+  .catch((error) => console.log(error));
